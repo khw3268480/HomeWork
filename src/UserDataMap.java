@@ -1,8 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserDataMap {
 
@@ -19,6 +18,7 @@ public class UserDataMap {
     }
 
     HashMap<Integer, DataManager> dataMap = new HashMap<>();
+    PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Collections.reverseOrder()); // 유저 식별코드를 우선순위큐로 구현해 빠른 최대값 찾기 ( Collections.reverseOrder() 사용하여 첫번째 인덱스에 최대값이 저장됨! )
 
 
     public HashMap<Integer, DataManager> getDataMap() {
@@ -31,6 +31,10 @@ public class UserDataMap {
 
     public void removeDataMap(Integer dataNumber) {
         dataMap.remove(dataNumber);
+    }
+
+    public PriorityQueue<Integer> getPriorityQueue() {
+        return priorityQueue;
     }
 
     public void register() throws FileNotFoundException {
@@ -49,12 +53,14 @@ public class UserDataMap {
             nextLine.replace(" ", "");
             String[] split = nextLine.split("/");
             dataNumber = Integer.valueOf(split[0].replace("[", "").replace("]", "").replace(" ", ""));
+            priorityQueue.add(dataNumber);
+
             userName = split[1].replace(" ", "");
             phoneNumber = split[2].replace(" ", "");
             email = split[3].replace(" ", "");
             imagePath = split[4].replace(" ", "");
 
-            DataManager dataManager = new DataManager(userName, email, phoneNumber, imagePath);
+            DataManager dataManager = new DataManager(dataNumber, userName, email, phoneNumber, imagePath);
             dataMap.put(dataNumber, dataManager);
         }
     }

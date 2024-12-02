@@ -6,10 +6,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 
-/**
- * 1. 삭제 시, 창이 닫히긴 하는데 다시 다른 detailed창 열면 한개씩 추가 되면서 열림 버그 수정해야함.  --------
- * **/
-
 public class MainFrame extends JFrame {
 
 

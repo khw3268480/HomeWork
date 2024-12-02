@@ -4,24 +4,48 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DetailedUserInfo extends JFrame {
 
-    public DetailedUserInfo(String path, String dataNumber, String name, String phoneNumber, String email) {
+    private static DetailedUserInfo instance;
+
+    DeleteButton deleteButton;
+    UserImage userImage;
+    UserInfo userInfo;
+
+    public static DetailedUserInfo getInstance() {
+        if (instance == null) {
+            instance = new DetailedUserInfo();
+        }
+        return instance;
+    }
+
+    public void setPanelInfo(String path, String dataNumber, String name, String phoneNumber, String email) {
+        if(deleteButton!=null) {
+            remove(deleteButton);
+        }
+        if(userImage!=null) {
+            remove(userImage);
+        }
+        if(userInfo!=null) {
+            remove(userInfo);
+        }
         setLayout(new GridLayout(3, 1));
+
+        deleteButton = new DeleteButton(this);
+        userImage = new UserImage(path);
+        userInfo = new UserInfo(dataNumber, name, phoneNumber, email);
         // 상단에 수정/삭제 버튼
         // 중앙에 사진
         // 하단에 이름,전화번호,이메일
-        add(new DeleteButton(this));
-        add(new UserImage(path));
-        add(new UserInfo(dataNumber, name, phoneNumber, email));
+        add(deleteButton);
+        add(userImage);
+        add(userInfo);
 
         setSize(500, 300);
         setVisible(true);
-
-
     }
+
 }
 
 class DeleteButton extends JPanel {
@@ -39,18 +63,18 @@ class DeleteButton extends JPanel {
                     UserListUI ListInstance = UserListUI.getInstance();
                     UserDataMap dataMapInstance = UserDataMap.getInstance();
                     int selectedIndex = ListInstance.getSelectedIndex();
-                    int whereDataCodeExist = findWhereDataCodeExist(UserListUI.getInstance().getDataNumberInList(selectedIndex));
-                    System.out.println(whereDataCodeExist);
+                    int realDataNumber = UserListUI.getInstance().getDataNumberFromUIString(selectedIndex);
+                    int whereDataCodeExist = findWhereDataCodeExist(realDataNumber);
                     deleteLineData(whereDataCodeExist); // txt파일에서 삭제 : 검색 시 삭제 할 경우에 문제가 발생함.
 
                     // UserListUI.getInstance().getDataNumberInList(selectedIndex) <- JList에서 데이터코드 가져오는 애.
 
-
-                    dataMapInstance.removeDataMap(UserListUI.getInstance().getDataNumberInList(selectedIndex)); // 메모리상에서 제거 <- 얘는 정상이야.
+                    UserDataMap.getInstance().priorityQueue.remove(realDataNumber);
+                    dataMapInstance.removeDataMap(UserListUI.getInstance().getDataNumberFromUIString(selectedIndex)); // 메모리상에서 제거 <- 얘는 정상이야.
 
                     JOptionPane.showMessageDialog(null, "정보를 성공적으로 삭제하였습니다!", "삭제 완료", JOptionPane.INFORMATION_MESSAGE);
 
-                    ListInstance.replaceJList();
+                    ListInstance.refreshJList();
 
                     parentFrame.dispose();
 
@@ -62,7 +86,8 @@ class DeleteButton extends JPanel {
         setSize(100, 20);
         setVisible(true);
     }
-    public int findWhereDataCodeExist(int searchDataCode ){ // 해당 데이터코드가 몇번째 줄에 있는지 찾는 거.
+
+    public int findWhereDataCodeExist(int searchDataCode) { // 해당 데이터코드가 몇번째 줄에 있는지 찾는 거.
         File inputfile = new File("src/data.txt");
         try {
             BufferedReader reader = new BufferedReader(new FileReader(inputfile));
@@ -75,12 +100,12 @@ class DeleteButton extends JPanel {
             }
             for (int i = 1; i < lines.size(); i++) {
                 String s = lines.get(i);
-                System.out.println(s + " ::: i = " + i + " ::: searchDataCode = " + searchDataCode);
+//                System.out.println(s + " ::: i = " + i + " ::: searchDataCode = " + searchDataCode);
                 if (getDataNumberInString(s) == searchDataCode) {
                     return i;
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return -1;

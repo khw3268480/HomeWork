@@ -29,7 +29,7 @@ public class UserListUI extends JPanel {
     public UserListUI() {
         setLayout(new FlowLayout());
 
-        replaceJList();
+        refreshJList();
 
         setSize(600, 100);
         setVisible(true);
@@ -37,7 +37,7 @@ public class UserListUI extends JPanel {
     public int getSelectedIndex(){
         return list.getSelectedIndex();
     }
-    public int getDataNumberInList(int index){
+    public int getDataNumberFromUIString(int index){
         StringBuilder stringBuilder = new StringBuilder();
         String dataString = vector.get(index);
         int i = 0;
@@ -50,7 +50,7 @@ public class UserListUI extends JPanel {
         }
         return Integer.valueOf(stringBuilder.toString());
     }
-    public void replaceJList(){
+    public void refreshJList(){
         UserDataMap dataMapInstance = UserDataMap.getInstance();
         HashMap<Integer, DataManager> dataMap = dataMapInstance.getDataMap();
 
@@ -68,9 +68,10 @@ public class UserListUI extends JPanel {
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    int index = UserListUI.getInstance().getDataNumberInList(getSelectedIndex());
+                    int index = UserListUI.getInstance().getDataNumberFromUIString(getSelectedIndex());
                     DataManager dataManager = dataMap.get(index);
-                    new DetailedUserInfo(dataManager.getImagePath(), String.valueOf(index), dataManager.getUserName(), dataManager.getNumber(), dataManager.getEmail());
+                    DetailedUserInfo detailedUserInfoInstance = DetailedUserInfo.getInstance();
+                    detailedUserInfoInstance.setPanelInfo(dataManager.getImagePath(), String.valueOf(index), dataManager.getUserName(), dataManager.getNumber(), dataManager.getEmail());
                 }
             }
         });

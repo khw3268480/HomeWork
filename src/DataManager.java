@@ -14,14 +14,23 @@ import java.util.Scanner;
 public class DataManager {
 
     private String userName, email, number, imagePath;
+    private Integer dataCode;
 
 
-
-    public DataManager(String username, String email, String number, String imagePath) {
+    public DataManager(Integer dataCode, String username, String email, String number, String imagePath) {
+        this.dataCode = dataCode;
         this.userName = username;
         this.email = email;
         this.number = number;
         this.imagePath = imagePath;
+    }
+
+    public Integer getDataCode() {
+        return dataCode;
+    }
+
+    public void setDataCode(Integer dataCode) {
+        this.dataCode = dataCode;
     }
 
     public void setUserName(String userName) {

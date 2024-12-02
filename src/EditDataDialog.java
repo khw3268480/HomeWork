@@ -6,10 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class EditDataDialog extends JDialog {
 
@@ -79,7 +76,7 @@ public class EditDataDialog extends JDialog {
     public void makeVisible(boolean bool) {
         userListUIInstance = UserListUI.getInstance();
         selectedListIndex = userListUIInstance.getSelectedIndex();
-        dataNumberInList = userListUIInstance.getDataNumberInList(selectedListIndex);
+        dataNumberInList = userListUIInstance.getDataNumberFromUIString(selectedListIndex);
         nameField.setText(dataMapInstance.getDataMap().get(dataNumberInList).getUserName());
         emailField.setText(dataMapInstance.getDataMap().get(dataNumberInList).getEmail());
         numberField.setText(dataMapInstance.getDataMap().get(dataNumberInList).getNumber());
@@ -170,7 +167,7 @@ public class EditDataDialog extends JDialog {
                     }
                     a++;
                 }
-                UserListUI.getInstance().replaceJList();
+                UserListUI.getInstance().refreshJList();
 
                 userDataCount++;
 

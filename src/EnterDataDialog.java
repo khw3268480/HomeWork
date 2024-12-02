@@ -8,8 +8,7 @@ import java.awt.event.KeyEvent;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.PriorityQueue;
 
 public class EnterDataDialog extends JDialog {
 
@@ -36,7 +35,7 @@ public class EnterDataDialog extends JDialog {
     }
 
 
-    public Integer userDataCount = 0;
+    public Integer userDataNumber = 0;
 
 
 
@@ -60,11 +59,9 @@ public class EnterDataDialog extends JDialog {
         dataMapInstance = UserDataMap.getInstance();
         fw = new FileWriter(userData.getPath(), true);
         int count = (int) Files.lines(Path.of(userData.getPath())).count();
-        userDataCount = count-1;
-        if (userDataCount == -1) {
+        if (count == 0) {
             fw.write("데이터 번호 / 이름 / 전화번호 / 이메일 / 사진경로\n");
             fw.flush();
-            userDataCount = 0;
         }
         imageChooserBtn.setSize(30, 30);
         Container c = getContentPane();
@@ -110,16 +107,16 @@ public class EnterDataDialog extends JDialog {
 
         confirmBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (nameField.getText().isEmpty()) {
+                if (nameField.getText().isEmpty() || nameField.getText().equals("이름")) {
                     JOptionPane.showMessageDialog(null, "이름을 입력하세요.", "오류발생!", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-                if (numberField.getText().isEmpty()) {
+                if (numberField.getText().isEmpty() || numberField.getText().equals("전화번호")) {
                     JOptionPane.showMessageDialog(null, "전화번호를 입력하세요.", "오류발생!", JOptionPane.ERROR_MESSAGE);
                     return;
 
                 }
-                if (emailField.getText().isEmpty()) {
+                if (emailField.getText().isEmpty() || emailField.getText().equals("이메일")) {
                     JOptionPane.showMessageDialog(null, "이메일을 입력하세요.", "오류발생!", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
@@ -135,18 +132,26 @@ public class EnterDataDialog extends JDialog {
                 name = nameField.getText();
                 number = numberField.getText();
                 email = emailField.getText();
-                String format = String.format("[%d] / %s / %s / %s / %s\n", userDataCount, name, number, email, imagePath);
+                PriorityQueue<Integer> priorityQueue = UserDataMap.getInstance().getPriorityQueue();
+                if(priorityQueue.isEmpty()){
+                    priorityQueue.add(0);
+                }
+                userDataNumber = priorityQueue.peek() + 1;
+
+                priorityQueue.add(userDataNumber);
+                for (Integer i : priorityQueue) {
+                    System.out.println(i);
+                }
+                String format = String.format("[%d] / %s / %s / %s / %s\n", userDataNumber, name, number, email, imagePath);
                 try {
                     fw.write(format);
                     fw.flush();
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                DataManager dataManager = new DataManager(name, email, number, imagePath);
-                dataMapInstance.addDataMap(userDataCount, dataManager);
-                UserListUI.getInstance().replaceJList();
-                userDataCount++;
-
+                DataManager dataManager = new DataManager(userDataNumber, name, email, number, imagePath);
+                dataMapInstance.addDataMap(userDataNumber, dataManager);
+                UserListUI.getInstance().refreshJList();
             }
         });
         imageChooserBtn.addActionListener(new ActionListener() {

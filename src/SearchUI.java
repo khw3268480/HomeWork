@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -46,7 +45,7 @@ public class SearchUI extends JPanel {
                 dataMap.clear();
                 dataMap.putAll(tempMap);
 
-                UserListUI.getInstance().replaceJList();
+                UserListUI.getInstance().refreshJList();
 
             }
         });
@@ -55,7 +54,7 @@ public class SearchUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 try {
                     UserDataMap.getInstance().register();
-                    UserListUI.getInstance().replaceJList();
+                    UserListUI.getInstance().refreshJList();
                 } catch (FileNotFoundException ex) {
                     throw new RuntimeException(ex);
                 }
