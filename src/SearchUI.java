@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Set;
@@ -16,6 +18,15 @@ public class SearchUI extends JPanel {
         add(searchField);
         add(btn);
         add(refreshBtn);
+
+        searchField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(searchField.getText().equals("검색할 전화번호 사용자의 이름을 입력하세요.")){
+                    searchField.setText("");
+                }
+            }
+        });
 
         btn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

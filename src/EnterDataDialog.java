@@ -20,7 +20,6 @@ public class EnterDataDialog extends JDialog {
     private FileWriter fileOutput;
 
 
-
     @Override
     public String getName() {
         return name;
@@ -36,7 +35,6 @@ public class EnterDataDialog extends JDialog {
 
 
     public Integer userDataNumber = 0;
-
 
 
     // 삽입할 정보: 이메일, 사진, 전화번호, 이름
@@ -79,6 +77,16 @@ public class EnterDataDialog extends JDialog {
         setVisible(false);
     }
 
+    public boolean checkNumberFormatRight(String number) { // 정규표현식을 통한 전화번호 포맷 확인
+        /** https://inpa.tistory.com/entry/JAVA-%E2%98%95-%EC%A0%95%EA%B7%9C%EC%8B%9DRegular-Expression-%EC%82%AC%EC%9A%A9%EB%B2%95-%EC%A0%95%EB%A6%AC 를 참고했습니다. **/
+        return number.matches("^01(?:0|1|[6-9])-(?:\\d{4})-(?:\\d{4})");
+    }
+
+    public boolean checkEmailFormatRight(String email) { // 정규표현식을 통한 이메일 포맷 확인 ( 사용법이 어려워, chatGPT를 참고했습니다. )
+//        return email.matches("^[a-zA-Z0-9.%+-]@[a-zA-Z0-9.-][.][a-zA-Z]{2,}");
+        return email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
     public void addListener() {
         nameField.addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
@@ -114,10 +122,17 @@ public class EnterDataDialog extends JDialog {
                 if (numberField.getText().isEmpty() || numberField.getText().equals("전화번호")) {
                     JOptionPane.showMessageDialog(null, "전화번호를 입력하세요.", "오류발생!", JOptionPane.ERROR_MESSAGE);
                     return;
-
+                }
+                if (!checkNumberFormatRight(numberField.getText())) {
+                    JOptionPane.showMessageDialog(null, "전화번호 양식이 올바르지 않습니다.\n01x-xxxx-xxxx", "오류발생!", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
                 if (emailField.getText().isEmpty() || emailField.getText().equals("이메일")) {
                     JOptionPane.showMessageDialog(null, "이메일을 입력하세요.", "오류발생!", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (!checkEmailFormatRight(emailField.getText())) {
+                    JOptionPane.showMessageDialog(null, "이메일 양식이 올바르지 않습니다.\nxxx@xxx.xxx", "오류발생!", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (imageChooser.getSelectedFile() == null) {
@@ -133,7 +148,7 @@ public class EnterDataDialog extends JDialog {
                 number = numberField.getText();
                 email = emailField.getText();
                 PriorityQueue<Integer> priorityQueue = UserDataMap.getInstance().getPriorityQueue();
-                if(priorityQueue.isEmpty()){
+                if (priorityQueue.isEmpty()) {
                     priorityQueue.add(0);
                 }
                 userDataNumber = priorityQueue.peek() + 1;

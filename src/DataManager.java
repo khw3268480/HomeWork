@@ -13,6 +13,8 @@ import java.util.Scanner;
 
 public class DataManager {
 
+    // 유저 정보를 클래스로 묶어 관리합니다.
+
     private String userName, email, number, imagePath;
     private Integer dataCode;
 

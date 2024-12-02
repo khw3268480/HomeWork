@@ -43,10 +43,9 @@ public class EditDataDialog extends JDialog {
     JButton confirmBtn = new JButton("입력");
     JButton imageChooserBtn = new JButton("파일 선택");
     UserDataMap dataMapInstance;
-    FileWriter fw;
     Integer selectedListIndex;
     UserListUI userListUIInstance;
-    Integer dataNumberInList;
+    Integer dataNumber;
 
 
     public EditDataDialog(JFrame frame, String title, boolean modal) throws IOException {
@@ -57,7 +56,7 @@ public class EditDataDialog extends JDialog {
         }
         dataMapInstance = UserDataMap.getInstance();
         imageChooserBtn.setSize(30, 30);
-        UserDataMap.getInstance().getDataMap();
+//        UserDataMap.getInstance().getDataMap();
         Container c = getContentPane();
         c.setBackground(Color.WHITE);
         c.setLayout(new FlowLayout());
@@ -68,19 +67,19 @@ public class EditDataDialog extends JDialog {
         c.add(confirmBtn, BorderLayout.NORTH);
         addListener();
 
-
         setSize(700, 100);
         setVisible(false);
     }
 
-    public void makeVisible(boolean bool) {
+    public void makeVisible(boolean bool) { // 정상작동 확인
         userListUIInstance = UserListUI.getInstance();
         selectedListIndex = userListUIInstance.getSelectedIndex();
-        dataNumberInList = userListUIInstance.getDataNumberFromUIString(selectedListIndex);
-        nameField.setText(dataMapInstance.getDataMap().get(dataNumberInList).getUserName());
-        emailField.setText(dataMapInstance.getDataMap().get(dataNumberInList).getEmail());
-        numberField.setText(dataMapInstance.getDataMap().get(dataNumberInList).getNumber());
-        imagePath = dataMapInstance.getDataMap().get(dataNumberInList).getImagePath();
+        dataNumber = userListUIInstance.getDataNumberFromUIString(selectedListIndex);
+//        System.out.println(dataMapInstance.getDataMap().get(dataNumberInList).getUserName());
+        nameField.setText(dataMapInstance.getDataMap().get(dataNumber).getUserName());
+        emailField.setText(dataMapInstance.getDataMap().get(dataNumber).getEmail());
+        numberField.setText(dataMapInstance.getDataMap().get(dataNumber).getNumber());
+        imagePath = dataMapInstance.getDataMap().get(dataNumber).getImagePath();
         setVisible(bool);
     }
 
@@ -144,28 +143,32 @@ public class EditDataDialog extends JDialog {
 //                    throw new RuntimeException(ex);
 //                }
 
-                dataMapInstance.getDataMap().get(dataNumberInList).setUserName(name);
-                dataMapInstance.getDataMap().get(dataNumberInList).setEmail(email);
-                dataMapInstance.getDataMap().get(dataNumberInList).setNumber(number);
-                dataMapInstance.getDataMap().get(dataNumberInList).setImagePath(imagePath);
+                dataMapInstance.getDataMap().get(dataNumber).setUserName(name);
+                dataMapInstance.getDataMap().get(dataNumber).setEmail(email);
+                dataMapInstance.getDataMap().get(dataNumber).setNumber(number);
+                dataMapInstance.getDataMap().get(dataNumber).setImagePath(imagePath);
                 BufferedReader bufferedReader;
                 ArrayList<String> originalStrings = new ArrayList<>();
                 try {
                     bufferedReader = new BufferedReader(new FileReader(userData));
                     String line = "";
                     while ((line = bufferedReader.readLine()) != null) {
+                        System.out.println(line);
                         originalStrings.add(line);
                     }
                 } catch (Exception ex) {
                     throw new RuntimeException(ex);
                 }
+                System.out.println(originalStrings.size());
                 for (int a = 1; a < originalStrings.size(); a++) {
 
-                    if (getDataNumberInString(originalStrings.get(a)) == dataNumberInList) {
-                        String format = String.format("[%d] / %s / %s / %s / %s\n", dataNumberInList, name, number, email, imagePath);
+                    if (getDataNumberInString(originalStrings.get(a)) == dataNumber) {
+                        String format = String.format("[%d] / %s / %s / %s / %s\n", dataNumber, name, number, email, imagePath);
+                        System.out.println("수정된 줄 : " + a + " 수정된 문장 : " + format);
                         replaceLineData(a, format);
                     }
-                    a++;
+//                    System.out.println(getDataNumberInString(originalStrings.get(a)) + " : : : : " + dataNumber);
+//                    a++;
                 }
                 UserListUI.getInstance().refreshJList();
 
@@ -223,12 +226,10 @@ public class EditDataDialog extends JDialog {
                 lines.add(line + "\n");
             }
 
-
             lines.set(index, modifiedString);
-
+//            System.out.println(index);
 
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(inputFile, false)); // 파일 전체 내용 삭제
-
 
             // 수정된 내용 임시 파일에 저장
 

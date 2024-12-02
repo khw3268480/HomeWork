@@ -42,7 +42,9 @@ public class DetailedUserInfo extends JFrame {
         add(userImage);
         add(userInfo);
 
-        setSize(500, 300);
+        pack();
+
+//        setSize(500, 300);
         setVisible(true);
     }
 
@@ -177,7 +179,7 @@ class UserImage extends JPanel {
 
         add(imageLabel);
 
-        setSize(500, 120);
+//        setSize(500, 120);
         setVisible(true);
     }
 }

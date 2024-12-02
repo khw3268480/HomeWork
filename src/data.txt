@@ -1,20 +1,2 @@
 데이터 번호 / 이름 / 전화번호 / 이메일 / 사진경로
-[0] / 김형우123 / asdg / asdgadsg / C:\Users\user\Documents\barba38.png
-[1] / asdg / asdgasdg / asdgas / C:\Users\user\Documents\knight.png
-[2] / asdgasd / gasdgsd / gasgasg / C:\Users\user\Documents\barbarian.png
-[3] / assdfhbsdfhsdfhsdfhsfdhdgasd / gasdgsd / gasgasg / C:\Users\user\Documents\제목 없음.png
-[4] / asdf / asdf / asdf / C:\Users\user\Documents\barba38.png
-[5] / asdf / asdf / asdf / C:\Users\user\Documents\barba38.png
-[6] / asdf / asdf / asdf / C:\Users\user\Documents\barba38.png
-[7] / asdf / asdf / asdf / C:\Users\user\Documents\barba38.png
-[8] / asdf / asdf / asdf / C:\Users\user\Documents\barba38.png
-[9] / asdgsdfhbfdsh / hsdfh / dsfh / C:\Users\user\Documents\barba2.png
-[10] / 가나다 / 123 / 123 / C:\Users\user\Documents\saver.png
-[12] / 동해이름 / 123 / 1253 / C:\Users\user\Documents\barba38.png
-[13] / e가낟 / 123 / 5123 / C:\Users\user\Documents\valkyrie_g.png
-[14] / e가낟136 / 123 / 5123 / C:\Users\user\Documents\valkyrie_g.png
-[15] / ahsdf / asdg / asdg / C:\Users\user\Documents\제목 없음.png
-[16] / ashasd / asdgasd / gasdgasdg / C:\Users\user\Documents\제목 없음.png
-[17] / 1235 / 12351 / 3521235 / C:\Users\user\Documents\valkyrie_g.png
-[18] / 1523 / 1325 / 1235 / C:\Users\user\Documents\barba2.png
-[20] / 1231235132 / 623451235 / 1235 / C:\Users\khw32\OneDrive\사진\Payments_paylaod\3.png
+[1] / 김형우2 / 010-6389-8480 / khw3268480@naver.com / C:\Users\user\Documents\barba13.png
